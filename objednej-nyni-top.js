@@ -49,18 +49,21 @@
 
   setTimeout(function () {
     if (window.innerWidth >= 768) return;
-    var h = bar.offsetHeight;
-    if (!h) return;
-    var fixed = [];
+    var fixedEls = [];
     document.querySelectorAll('body > *, body > * > *').forEach(function (el) {
       if (el === bar) return;
       var cs = window.getComputedStyle(el);
-      if (cs.position === 'fixed' && cs.top === '0px') fixed.push(el);
+      if (cs.position === 'fixed' && cs.top === '0px') fixedEls.push(el);
     });
-    if (fixed.length === 1) {
-      fixed[0].style.top = h + 'px';
-      var bp = parseInt(window.getComputedStyle(document.body).paddingTop) || 0;
-      document.body.style.paddingTop = (bp + h) + 'px';
+    if (!fixedEls.length) return;
+
+    function adjustHeader() {
+      var barBottom = bar.getBoundingClientRect().bottom;
+      var offset = Math.max(0, barBottom);
+      fixedEls.forEach(function (el) { el.style.top = offset + 'px'; });
     }
+
+    adjustHeader();
+    window.addEventListener('scroll', adjustHeader, { passive: true });
   }, 400);
 })();
