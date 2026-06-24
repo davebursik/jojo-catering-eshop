@@ -50,6 +50,8 @@
   setTimeout(function () {
     if (window.innerWidth >= 768) return;
     var h = bar.offsetHeight;
+    if (!h) return;
+
     var fixedEls = [];
     document.querySelectorAll('body > *, body > * > *').forEach(function (el) {
       if (el === bar) return;
@@ -58,9 +60,12 @@
     });
     if (!fixedEls.length) return;
 
-    var origPadding = parseInt(window.getComputedStyle(document.body).paddingTop) || 0;
+    var headerH = fixedEls[0].offsetHeight;
+    var origPadding = Math.max(
+      parseInt(window.getComputedStyle(document.body).paddingTop) || 0,
+      headerH
+    );
 
-    // Jednorázové posunutí
     fixedEls.forEach(function (el) { el.style.top = h + 'px'; });
     document.body.style.paddingTop = (origPadding + h) + 'px';
 
@@ -69,13 +74,9 @@
       if (reset) return;
       if (bar.getBoundingClientRect().bottom <= 0) {
         reset = true;
-        fixedEls.forEach(function (el) {
-          el.style.transition = 'top 0.2s ease';
-          el.style.top = '0px';
-        });
-        document.body.style.transition = 'padding-top 0.2s ease';
+        fixedEls.forEach(function (el) { el.style.top = '0px'; });
         document.body.style.paddingTop = origPadding + 'px';
       }
     }, { passive: true });
-  }, 400);
+  }, 600);
 })();
