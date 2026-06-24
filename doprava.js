@@ -65,11 +65,12 @@
             fetch(url)
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
+                    console.log('JOJO suggest response:', JSON.stringify(data.items && data.items[0]));
                     var items = data.items || [];
                     suggestions.innerHTML = '';
                     if (!items.length) { hideSuggestions(); return; }
                     items.forEach(function (item) {
-                        var text = item.label || item.name || '';
+                        var text = item.label || item.name || item.userData && (item.userData.suggestFirstRow || item.userData.name) || '';
                         var li = document.createElement('li');
                         li.textContent = text;
                         li.style.cssText = 'padding:9px 14px;cursor:pointer;border-bottom:1px solid #f0f0f0;font-size:14px;';
@@ -141,7 +142,7 @@
                     applyZone(km);
                 })
                 .catch(function (err) {
-                    console.log('JOJO DOPRAVA - routing error:', err);
+                    console.log('JOJO DOPRAVA - routing fetch error:', err);
                     showResult('error', 'Chyba při výpočtu trasy.');
                 });
         }
