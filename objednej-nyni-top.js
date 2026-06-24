@@ -15,7 +15,10 @@
     @keyframes joj-pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
     #joj-topbar strong{color:#DFC15E;font-weight:700;}
     #joj-topbar .joj-sep{opacity:.4;margin:0 6px;}
-    @media(max-width:600px){#joj-topbar{font-size:12px;padding:9px 10px;}}
+    @media(max-width:600px){
+      #joj-topbar{
+        position:fixed;top:0;left:0;right:0;z-index:99999;
+        font-size:12px;padding:9px 10px;}}
   `;
   document.head.appendChild(style);
 
