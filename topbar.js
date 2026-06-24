@@ -8,15 +8,20 @@
       padding:10px 16px;
       display:flex;align-items:center;justify-content:center;gap:8px;
       font-family:var(--template-font),"Source Sans 3",sans-serif;
-      font-size:14px;line-height:1.3;
+      font-size:14px;line-height:1;white-space:nowrap;
       box-shadow:0 2px 8px rgba(76,21,54,.25);}
     .joj-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;
       display:inline-block;flex-shrink:0;
       animation:joj-pulse 1.4s ease-in-out infinite;}
     @keyframes joj-pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
     #joj-topbar strong{color:#DFC15E;font-weight:700;}
-    #joj-topbar .joj-sep{opacity:.4;margin:0 4px;}
-    @media(max-width:480px){#joj-topbar{font-size:12px;padding:8px 12px;}}
+    #joj-topbar .joj-sep{opacity:.4;margin:0 6px;}
+    .joj-desktop{display:inline;}
+    .joj-mobile{display:none;}
+    @media(max-width:600px){
+      #joj-topbar{font-size:12px;padding:9px 10px;}
+      .joj-desktop{display:none;}
+      .joj-mobile{display:inline;}}
   `;
   document.head.appendChild(style);
 
@@ -32,9 +37,34 @@
       var rem = cutoff - mins;
       var rh = Math.floor(rem / 60);
       var rm = rem % 60;
-      var cas = rh > 0 ? '<strong>' + rh + ' h ' + rm + ' min</strong>' : '<strong>' + rm + ' min</strong>';
-      bar.innerHTML = '<span class="joj-dot"></span> 🚚 Objednejte do <strong>13:00</strong> — doručíme již <strong>zítra</strong><span class="joj-sep">|</span>zbývá ' + cas;
+      var cas = rh > 0 ? rh + ' h ' + rm + ' min' : rm + ' min';
+      bar.innerHTML =
+        '<span class="joj-dot"></span>' +
+        '<span class="joj-desktop">🚚 Objednejte do <strong>13:00</strong> — doručíme již <strong>zítra</strong><span class="joj-sep">|</span>zbývá <strong>' + cas + '</strong></span>' +
+        '<span class="joj-mobile">🚚 Doručíme <strong>zítra</strong> — zbývá <strong>' + cas + '</strong></span>';
     } else {
+      bar.innerHTML =
+        '<span class="joj-dot"></span>' +
+        '<span class="joj-desktop">🚚 Objednejte nyní — doručíme <strong>pozítří</strong><span class="joj-sep">|</span>uzávěrka zítra ve <strong>13:00</strong></span>' +
+        '<span class="joj-mobile">🚚 Doručíme <strong>pozítří</strong> — do <strong>13:00</strong></span>';
+    }
+  }
+
+  update();
+  setInterval(update, 60000);
+
+  setTimeout(function () {
+    var h = bar.offsetHeight;
+    var pageHeader = document.querySelector('header, #header, .header');
+    if (pageHeader) {
+      var pos = window.getComputedStyle(pageHeader).position;
+      if (pos === 'fixed' || pos === 'sticky') {
+        pageHeader.style.top = h + 'px';
+      }
+    }
+    document.body.style.paddingTop = (parseInt(document.body.style.paddingTop || 0) + h) + 'px';
+  }, 200);
+})();    } else {
       bar.innerHTML = '<span class="joj-dot"></span> 🚚 Objednejte nyní — doručíme <strong>pozítří</strong><span class="joj-sep">|</span>uzávěrka zítra ve <strong>13:00</strong>';
     }
   }
