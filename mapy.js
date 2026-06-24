@@ -20,7 +20,7 @@
     ];
 
     var SESSION_KEY = 'jojo_delivery';
-    var PRIMARY    = '#4C1536';
+    var PRIMARY = '#4C1536';
 
     function createWidget(container, opts) {
         opts = opts || {};
@@ -259,14 +259,12 @@
     }
 
     function escHtml(str) {
-        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     function init() {
         var placeholder = document.getElementById('jojo-doprava-kalkulacka');
-        if (placeholder) {
-            createWidget(placeholder, { switchRegion: false });
-        }
+        if (placeholder) createWidget(placeholder, { switchRegion: false });
 
         if (document.body.classList.contains('in-krok-1')) {
             hideRegionDropdown();
@@ -275,7 +273,7 @@
                 var wrapper = document.createElement('div');
                 wrapper.className = 'box box-sm box-bg-default co-box';
                 wrapper.style.cssText = 'margin-bottom:20px;padding:20px;';
-                wrapper.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span>🚗</span> Zjistěte cenu doručení k vám</div>';
+                wrapper.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:12px;">🚗 Zjistěte cenu doručení k vám</div>';
                 var inner = document.createElement('div');
                 wrapper.appendChild(inner);
                 deliveryBox.insertAdjacentElement('beforebegin', wrapper);
