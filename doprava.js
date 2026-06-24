@@ -130,15 +130,20 @@
             fetch(url)
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
+                    console.log('JOJO DOPRAVA - routing response:', JSON.stringify(data));
                     var route = data.routes && data.routes[0];
-                    if (!route || !route.distance) {
+                    var distance = route && (route.distance || route.length);
+                    if (!distance) {
                         showResult('error', 'Nepodařilo se vypočítat trasu. Zkuste zadat adresu přesněji.');
                         return;
                     }
-                    var km = Math.round(route.distance / 1000);
+                    var km = Math.round(distance / 1000);
                     applyZone(km);
                 })
-                .catch(function () { showResult('error', 'Chyba při výpočtu trasy.'); });
+                .catch(function (err) {
+                    console.log('JOJO DOPRAVA - routing error:', err);
+                    showResult('error', 'Chyba při výpočtu trasy.');
+                });
         }
 
         function applyZone(km) {
