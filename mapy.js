@@ -2,8 +2,8 @@
     'use strict';
 
     var MAPY_API_KEY = 'F5w5TlZz8C5HDhk2SSRklbiv242GQ4jH-sBiPOxuEBY';
-    var DEPOT_LAT = 49.7903;
-    var DEPOT_LON = 18.2523;
+    var DEPOT_LAT = 49.80028;
+    var DEPOT_LON = 18.23062;
 
     var ZONES = [
         { maxKm: 15,  label: 'Jojo rozvoz – do 15 km',  price: 150 },
@@ -20,7 +20,9 @@
     ];
 
     var SESSION_KEY = 'jojo_delivery';
-    var PRIMARY = '#4C1536';
+    var PRIMARY    = '#4C1536';
+
+    // ─── Widget ───────────────────────────────────────────────────────────────
 
     function createWidget(container, opts) {
         opts = opts || {};
@@ -49,6 +51,7 @@
         var selectedCoords = null;
         var suggestTimer   = null;
 
+        // Předvyplnit z sessionStorage
         var saved = loadSession();
         if (saved && saved.address) {
             input.value = saved.address;
@@ -62,6 +65,7 @@
             }
         }
 
+        // Zvýraznit input při focusu
         input.addEventListener('focus', function () { this.style.borderColor = PRIMARY; });
         input.addEventListener('blur', function () {
             this.style.borderColor = '#ddd';
@@ -214,6 +218,8 @@
         }
     }
 
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
     function getZone(km) {
         for (var i = 0; i < ZONES.length; i++) {
             if (km <= ZONES[i].maxKm) return ZONES[i];
@@ -259,13 +265,19 @@
     }
 
     function escHtml(str) {
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
-    function init() {
-        var placeholder = document.getElementById('jojo-doprava-kalkulacka');
-        if (placeholder) createWidget(placeholder, { switchRegion: false });
+    // ─── Init ─────────────────────────────────────────────────────────────────
 
+    function init() {
+        // Widget kdekoliv na webu přes placeholder
+        var placeholder = document.getElementById('jojo-doprava-kalkulacka');
+        if (placeholder) {
+            createWidget(placeholder, { switchRegion: false });
+        }
+
+        // Košík
         if (document.body.classList.contains('in-krok-1')) {
             hideRegionDropdown();
             var deliveryBox = document.querySelector('.co-delivery-method');
@@ -273,7 +285,7 @@
                 var wrapper = document.createElement('div');
                 wrapper.className = 'box box-sm box-bg-default co-box';
                 wrapper.style.cssText = 'margin-bottom:20px;padding:20px;';
-                wrapper.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:12px;">🚗 Zjistěte cenu doručení k vám</div>';
+                wrapper.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span>🚗</span> Zjistěte cenu doručení k vám</div>';
                 var inner = document.createElement('div');
                 wrapper.appendChild(inner);
                 deliveryBox.insertAdjacentElement('beforebegin', wrapper);
