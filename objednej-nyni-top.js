@@ -1,5 +1,7 @@
-/* === JoJo Catering — Lišta uzávěrky objednávek === */
+/* === JoJo Catering — Lišta uzávěrky objednávek (jen desktop) === */
 (function () {
+  if (window.innerWidth < 768) return;
+
   var style = document.createElement('style');
   style.textContent = `
     #joj-topbar{
@@ -15,7 +17,6 @@
     @keyframes joj-pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
     #joj-topbar strong{color:#DFC15E;font-weight:700;}
     #joj-topbar .joj-sep{opacity:.4;margin:0 6px;}
-    @media(max-width:600px){#joj-topbar{font-size:12px;padding:9px 10px;}}
   `;
   document.head.appendChild(style);
 
@@ -46,37 +47,4 @@
 
   update();
   setInterval(update, 60000);
-
-  setTimeout(function () {
-    if (window.innerWidth >= 768) return;
-    var h = bar.offsetHeight;
-    if (!h) return;
-
-    var fixedEls = [];
-    document.querySelectorAll('body > *, body > * > *').forEach(function (el) {
-      if (el === bar) return;
-      var cs = window.getComputedStyle(el);
-      if (cs.position === 'fixed' && cs.top === '0px') fixedEls.push(el);
-    });
-    if (!fixedEls.length) return;
-
-    var headerH = fixedEls[0].offsetHeight;
-    var origPadding = Math.max(
-      parseInt(window.getComputedStyle(document.body).paddingTop) || 0,
-      headerH
-    );
-
-    fixedEls.forEach(function (el) { el.style.top = h + 'px'; });
-    document.body.style.paddingTop = (origPadding + h) + 'px';
-
-    var reset = false;
-    window.addEventListener('scroll', function () {
-      if (reset) return;
-      if (bar.getBoundingClientRect().bottom <= 0) {
-        reset = true;
-        fixedEls.forEach(function (el) { el.style.top = '0px'; });
-        document.body.style.paddingTop = origPadding + 'px';
-      }
-    }, { passive: true });
-  }, 600);
 })();
