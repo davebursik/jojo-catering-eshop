@@ -3,19 +3,23 @@
 
     var MAPY_API_KEY = 'F5w5TlZz8C5HDhk2SSRklbiv242GQ4jH-sBiPOxuEBY';
 
-    // Souřadnice depa: Výškovická 3086/44, 700 30 Ostrava-Zábřeh
     var DEPOT_LAT = 49.7903;
     var DEPOT_LON = 18.2523;
 
     // Zóny – label musí přesně odpovídat názvu regionu v Shoptetu (em dash –)
+    // Cena = cena z ceníku pro horní hranici pásma
     var ZONES = [
-        { maxKm: 15,  label: 'Jojo rozvoz – do 15 km',  price: 0 },
-        { maxKm: 30,  label: 'Jojo rozvoz – do 30 km',  price: 150 },
-        { maxKm: 50,  label: 'Jojo rozvoz – do 50 km',  price: 200 },
-        { maxKm: 65,  label: 'Jojo rozvoz – do 65 km',  price: 250 },
-        { maxKm: 75,  label: 'Jojo rozvoz – do 75 km',  price: 350 },
-        { maxKm: 95,  label: 'Jojo rozvoz – do 95 km',  price: 400 },
-        { maxKm: 120, label: 'Jojo rozvoz – do 120 km', price: 550 },
+        { maxKm: 15,  label: 'Jojo rozvoz – do 15 km',  price: 150 },
+        { maxKm: 20,  label: 'Jojo rozvoz – do 20 km',  price: 220 },
+        { maxKm: 25,  label: 'Jojo rozvoz – do 25 km',  price: 280 },
+        { maxKm: 30,  label: 'Jojo rozvoz – do 30 km',  price: 350 },
+        { maxKm: 40,  label: 'Jojo rozvoz – do 40 km',  price: 400 },
+        { maxKm: 50,  label: 'Jojo rozvoz – do 50 km',  price: 450 },
+        { maxKm: 60,  label: 'Jojo rozvoz – do 60 km',  price: 550 },
+        { maxKm: 70,  label: 'Jojo rozvoz – do 70 km',  price: 650 },
+        { maxKm: 80,  label: 'Jojo rozvoz – do 80 km',  price: 760 },
+        { maxKm: 90,  label: 'Jojo rozvoz – do 90 km',  price: 880 },
+        { maxKm: 100, label: 'Jojo rozvoz – do 100 km', price: 1000 },
     ];
 
     var SESSION_KEY = 'jojo_delivery_address';
@@ -65,7 +69,6 @@
             fetch(url)
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
-                    console.log('JOJO suggest response:', JSON.stringify(data.items && data.items[0]));
                     var items = data.items || [];
                     suggestions.innerHTML = '';
                     if (!items.length) { hideSuggestions(); return; }
@@ -151,7 +154,7 @@
             }
 
             if (!zone) {
-                showResult('error', 'Vzdálenost ' + km + ' km přesahuje naši doručovací oblast (max. 120 km). Kontaktujte nás.');
+                showResult('error', 'Vzdálenost ' + km + ' km je mimo naši doručovací oblast (max. 100 km). Kontaktujte nás.');
                 return;
             }
 
@@ -168,11 +171,11 @@
                 }
             }
 
-            var priceText = zone.price === 0 ? 'Doprava <strong>zdarma</strong>' : 'Cena dopravy: <strong>' + zone.price + ' Kč</strong>';
+            var priceText = 'Cena dopravy: <strong>' + zone.price + ' Kč</strong>';
             if (found) {
                 showResult('ok', 'Vzdálenost: <strong>' + km + ' km</strong> – ' + priceText);
             } else {
-                showResult('warn', 'Vzdálenost: ' + km + ' km – vyberte prosím ručně region &quot;' + zone.label + '&quot; (' + zone.price + ' Kč).');
+                showResult('warn', 'Vzdálenost: ' + km + ' km – ' + priceText + ' – vyberte ručně region &quot;' + zone.label + '&quot;.');
             }
 
             if (selectedAddress) {
