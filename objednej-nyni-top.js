@@ -57,10 +57,12 @@
     });
     if (!fixedEls.length) return;
 
+    var origPadding = parseInt(window.getComputedStyle(document.body).paddingTop) || 0;
+
     function adjustHeader() {
-      var barBottom = bar.getBoundingClientRect().bottom;
-      var offset = Math.max(0, barBottom);
-      fixedEls.forEach(function (el) { el.style.top = offset + 'px'; });
+      var barBottom = Math.max(0, bar.getBoundingClientRect().bottom);
+      fixedEls.forEach(function (el) { el.style.top = barBottom + 'px'; });
+      document.body.style.paddingTop = (origPadding + barBottom) + 'px';
     }
 
     adjustHeader();
