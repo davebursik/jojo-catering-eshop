@@ -52,36 +52,4 @@
 
   update();
   setInterval(update, 60000);
-
-  setTimeout(function () {
-    var h = bar.offsetHeight;
-    var pageHeader = document.querySelector('header, #header, .header');
-    if (pageHeader) {
-      var pos = window.getComputedStyle(pageHeader).position;
-      if (pos === 'fixed' || pos === 'sticky') {
-        pageHeader.style.top = h + 'px';
-      }
-    }
-    document.body.style.paddingTop = (parseInt(document.body.style.paddingTop || 0) + h) + 'px';
-  }, 200);
-})();    } else {
-      bar.innerHTML = '<span class="joj-dot"></span> 🚚 Objednejte nyní — doručíme <strong>pozítří</strong><span class="joj-sep">|</span>uzávěrka zítra ve <strong>13:00</strong>';
-    }
-  }
-
-  update();
-  setInterval(update, 60000);
-
-  // Posuň obsah stránky dolů o výšku lišty
-  setTimeout(function () {
-    var h = bar.offsetHeight;
-    var pageHeader = document.querySelector('header, #header, .header');
-    if (pageHeader) {
-      var pos = window.getComputedStyle(pageHeader).position;
-      if (pos === 'fixed' || pos === 'sticky') {
-        pageHeader.style.top = h + 'px';
-      }
-    }
-    document.body.style.paddingTop = (parseInt(document.body.style.paddingTop || 0) + h) + 'px';
-  }, 200);
 })();
