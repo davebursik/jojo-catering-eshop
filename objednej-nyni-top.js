@@ -15,10 +15,7 @@
     @keyframes joj-pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
     #joj-topbar strong{color:#DFC15E;font-weight:700;}
     #joj-topbar .joj-sep{opacity:.4;margin:0 6px;}
-    @media(max-width:600px){
-      #joj-topbar{
-        position:fixed;top:0;left:0;right:0;z-index:99999;
-        font-size:12px;padding:9px 10px;}}
+    @media(max-width:600px){#joj-topbar{font-size:12px;padding:9px 10px;}}
   `;
   document.head.appendChild(style);
 
@@ -49,4 +46,21 @@
 
   update();
   setInterval(update, 60000);
+
+  setTimeout(function () {
+    if (window.innerWidth >= 768) return;
+    var h = bar.offsetHeight;
+    if (!h) return;
+    var fixed = [];
+    document.querySelectorAll('body > *, body > * > *').forEach(function (el) {
+      if (el === bar) return;
+      var cs = window.getComputedStyle(el);
+      if (cs.position === 'fixed' && cs.top === '0px') fixed.push(el);
+    });
+    if (fixed.length === 1) {
+      fixed[0].style.top = h + 'px';
+      var bp = parseInt(window.getComputedStyle(document.body).paddingTop) || 0;
+      document.body.style.paddingTop = (bp + h) + 'px';
+    }
+  }, 400);
 })();
