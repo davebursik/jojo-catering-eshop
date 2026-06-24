@@ -131,9 +131,7 @@
             fetch(url)
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
-                    console.log('JOJO DOPRAVA - routing response:', JSON.stringify(data));
-                    var route = data.routes && data.routes[0];
-                    var distance = route && (route.distance || route.length);
+                    var distance = data.length;
                     if (!distance) {
                         showResult('error', 'Nepodařilo se vypočítat trasu. Zkuste zadat adresu přesněji.');
                         return;
@@ -142,7 +140,6 @@
                     applyZone(km);
                 })
                 .catch(function (err) {
-                    console.log('JOJO DOPRAVA - routing fetch error:', err);
                     showResult('error', 'Chyba při výpočtu trasy.');
                 });
         }
